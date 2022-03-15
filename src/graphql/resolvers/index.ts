@@ -9,7 +9,6 @@ const resolvers = {
         if (order) {
           const hero = heroes[0];
           const keys = Object.keys(hero);
-          console.log(Object.hasOwnProperty(order));
   
           let isInnerKey = false;
           let outterAtribute = '';
