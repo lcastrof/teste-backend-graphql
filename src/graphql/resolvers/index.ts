@@ -1,4 +1,5 @@
 import { ApolloError } from 'apollo-server';
+import { SearchFilter } from '../../types';
 import { ResolverContext } from './context';
 
 const resolvers = {
@@ -52,6 +53,55 @@ const resolvers = {
       try {
         const hero = await dataSources.superHeroApi.listSingleHero(id);
         return hero;
+      } catch (err) {
+        console.log({ err });
+        throw err;
+      }
+    },
+
+    searchHeroes: async (_: any, { query, filter }: { query: string, filter?: SearchFilter }, { dataSources }: ResolverContext) => {
+      try {
+        // Formatar a query para evitar ser case sensitive
+        const formattedQuery = query.toLowerCase();
+        const heroes = await dataSources.superHeroApi.listHeroes();
+
+        const queriedHeroes = heroes.filter((hero) => {
+          // Iterando por cada propriedade do herói
+          for (const key in hero) {
+            // Caso tenha um filtro e o atributo não seja o do filtro, passar verificação
+            if (filter && key !== filter) continue;
+
+            const attribute = hero[key];
+            if (typeof attribute === 'string') {
+              if(attribute.toLowerCase().includes(formattedQuery)) return true;
+            }
+            
+            // Caso o atributo for um objeto, iterar em cima dele
+            if (typeof attribute === 'object') {
+              for (const attributeKey in attribute) {
+                const attributeValue = attribute[attributeKey];
+                if (typeof attributeValue === 'string') {
+                  if(attributeValue.toLowerCase().includes(formattedQuery)) return true;
+                }
+                
+                // Caso o atributo do atributo for um objeto ou array, iterar em cima dele novamente
+                if (typeof attributeValue === 'object') {
+                  let haveAttribute = false;
+                  attributeValue?.forEach((value: string) => {
+                    if (value.includes(query)) {
+                      haveAttribute = true;
+                    }
+                  });
+                  if (haveAttribute) return true;
+                }
+              }
+            }
+          }
+
+          return false;
+        });
+
+        return queriedHeroes;
       } catch (err) {
         console.log({ err });
         throw err;

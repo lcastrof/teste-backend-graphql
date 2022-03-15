@@ -55,3 +55,5 @@ export interface SuperHero {
     connections: Connections;
     images: Images;
 }
+
+export type SearchFilter = 'name' | 'appearance' | 'biography' | 'work' | 'connections';

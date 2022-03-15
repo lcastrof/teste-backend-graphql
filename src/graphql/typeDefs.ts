@@ -58,9 +58,18 @@ const typeDefs = gql`
     powerstats: Powerstats
   }
 
+  enum SearchFilter {
+    name
+    appearance
+    biography
+    work
+    connections
+  }
+
   type Query {
     listHeroes(limit: Int, order: String): [SuperHero]!
     getSingleHero(id: Int!): SuperHero!
+    searchHeroes(query: String!, filter: SearchFilter): [SuperHero]
   }
 `;
 
