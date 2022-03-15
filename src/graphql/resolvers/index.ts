@@ -47,6 +47,16 @@ const resolvers = {
         throw err;
       }
     },
+
+    getSingleHero: async (_: any, { id }: { id: number }, { dataSources }: ResolverContext) => {
+      try {
+        const hero = await dataSources.superHeroApi.listSingleHero(id);
+        return hero;
+      } catch (err) {
+        console.log({ err });
+        throw err;
+      }
+    },
   }
 }
 

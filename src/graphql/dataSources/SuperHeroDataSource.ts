@@ -12,6 +12,10 @@ class SuperHeroAPI extends RESTDataSource {
   async listHeroes(): Promise<SuperHero[]> {
     return this.get(`all.json`);
   }
+
+  async listSingleHero(id: number): Promise<SuperHero> {
+    return this.get(`id/${id}.json`);
+  }
 }
 
 export default SuperHeroAPI;

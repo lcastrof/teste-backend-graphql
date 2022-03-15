@@ -60,6 +60,7 @@ const typeDefs = gql`
 
   type Query {
     listHeroes(limit: Int, order: String): [SuperHero]!
+    getSingleHero(id: Int!): SuperHero!
   }
 `;
 
