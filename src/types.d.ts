@@ -1,22 +1,22 @@
-export interface Powerstats {
+export type Powerstats = {
     intelligence: number;
     strength: number;
     speed: number;
     durability: number;
     power: number;
     combat: number;
-}
+};
 
-export interface Appearance {
+export type Appearance = {
     gender: string;
     race: string;
     height: string[];
     weight: string[];
     eyeColor: string;
     hairColor: string;
-}
+};
 
-export interface Biography {
+export type Biography = {
     fullName: string;
     alterEgos: string;
     aliases: string[];
@@ -24,36 +24,47 @@ export interface Biography {
     firstAppearance: string;
     publisher: string;
     alignment: string;
-}
+};
 
-export interface Work {
+export type Work = {
     occupation: string;
     base: string;
-}
+};
 
-export interface Connections {
+export type Connections = {
     groupAffiliation: string;
     relatives: string;
-}
+};
 
-export interface Images {
+export type Images = {
     xs: string;
     sm: string;
     md: string;
     lg: string;
-}
+};
 
-export interface SuperHero {
+export type SuperHero = {
     [key: string]: any;
     id: number;
     name: string;
-    slug: string;
-    powerstats: Powerstats;
-    appearance: Appearance;
-    biography: Biography;
-    work: Work;
-    connections: Connections;
-    images: Images;
-}
+    slug?: string;
+    powerstats?: Powerstats;
+    appearance?: Appearance;
+    biography?: Biography;
+    work?: Work;
+    connections?: Connections;
+    images?: Images;
+};
 
 export type SearchFilter = 'name' | 'appearance' | 'biography' | 'work' | 'connections';
+
+export type HeroPayloadCreate = {
+    name: string;
+    slug?: string;
+    images?: Images;
+    connections?: Connections;
+    work?: Work;
+    biography?: Biography;
+    appearance?: Appearance;
+    powerstats?: Powerstats;
+};

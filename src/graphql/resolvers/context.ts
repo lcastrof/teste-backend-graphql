@@ -1,6 +1,6 @@
 import SuperHeroAPI from "../dataSources/SuperHeroDataSource";
 
-export interface DataSources {
+export type DataSources = {
   superHeroApi: SuperHeroAPI;
 };
 

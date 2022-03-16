@@ -1,16 +1,30 @@
 import { ApolloError } from 'apollo-server';
-import { SearchFilter } from '../../types';
+import { HeroPayloadCreate, SearchFilter } from '../../types';
 import { ResolverContext } from './context';
+
+type ListHeroesParams = {
+  limit?: number;
+  order?: string;
+};
+
+type SearchHeroesParams = {
+  query: string;
+  filter?: SearchFilter;
+};
+
+type CreateHeroParams = {
+  data: HeroPayloadCreate;
+};
 
 const resolvers = {
   Query: {
-    listHeroes: async (_: any, { limit, order }: { limit?: number, order?: string }, { dataSources }: ResolverContext) => {
+    listHeroes: async (_: any, { limit, order }: ListHeroesParams, { dataSources }: ResolverContext) => {
       try {
         const heroes = await dataSources.superHeroApi.listHeroes();
         if (order) {
           const hero = heroes[0];
           const keys = Object.keys(hero);
-  
+
           let isInnerKey = false;
           let outterAtribute = '';
           keys.forEach((key) => {
@@ -19,7 +33,7 @@ const resolvers = {
               outterAtribute = key;
             }
           });
-  
+
           if (keys.includes(order)) {
             heroes.sort((heroA, heroB) => {
               if (heroA[order] > heroB[order]) return 1;
@@ -36,12 +50,12 @@ const resolvers = {
             throw new ApolloError("The attribute passed in 'order' does not exist");
           }
         }
-  
+
         if (limit) {
           const limitedHeroes = heroes.slice(0, limit);
           return limitedHeroes;
         }
-  
+
         return heroes;
       } catch (err) {
         console.log({ err });
@@ -49,17 +63,7 @@ const resolvers = {
       }
     },
 
-    getSingleHero: async (_: any, { id }: { id: number }, { dataSources }: ResolverContext) => {
-      try {
-        const hero = await dataSources.superHeroApi.listSingleHero(id);
-        return hero;
-      } catch (err) {
-        console.log({ err });
-        throw err;
-      }
-    },
-
-    searchHeroes: async (_: any, { query, filter }: { query: string, filter?: SearchFilter }, { dataSources }: ResolverContext) => {
+    searchHeroes: async (_: any, { query, filter }: SearchHeroesParams, { dataSources }: ResolverContext) => {
       try {
         // Formatar a query para evitar ser case sensitive
         const formattedQuery = query.toLowerCase();
@@ -73,17 +77,17 @@ const resolvers = {
 
             const attribute = hero[key];
             if (typeof attribute === 'string') {
-              if(attribute.toLowerCase().includes(formattedQuery)) return true;
+              if (attribute.toLowerCase().includes(formattedQuery)) return true;
             }
-            
+
             // Caso o atributo for um objeto, iterar em cima dele
             if (typeof attribute === 'object') {
               for (const attributeKey in attribute) {
                 const attributeValue = attribute[attributeKey];
                 if (typeof attributeValue === 'string') {
-                  if(attributeValue.toLowerCase().includes(formattedQuery)) return true;
+                  if (attributeValue.toLowerCase().includes(formattedQuery)) return true;
                 }
-                
+
                 // Caso o atributo do atributo for um objeto ou array, iterar em cima dele novamente
                 if (typeof attributeValue === 'object') {
                   let haveAttribute = false;
@@ -102,6 +106,18 @@ const resolvers = {
         });
 
         return queriedHeroes;
+      } catch (err) {
+        console.log({ err });
+        throw err;
+      }
+    },
+  },
+
+  Mutation: {
+    createHero: async (_: any, { data }: CreateHeroParams, { dataSources }: ResolverContext) => {
+      try {
+        const hero = await dataSources.superHeroApi.createHero(data);
+        return hero;
       } catch (err) {
         console.log({ err });
         throw err;
