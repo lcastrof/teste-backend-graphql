@@ -5,13 +5,11 @@ import { HeroPayloadCreate } from '../../types';
 const database = new FakeDatabase();
 
 class SuperHeroAPI extends RESTDataSource {
-  private database;
   constructor() {
     // Always call super()
     super();
     // Sets the base URL for the REST API
     this.baseURL = 'https://akabab.github.io/superhero-api/api';
-    this.database = new FakeDatabase();
   }
 
   async handleGetHeroes() {
@@ -30,7 +28,7 @@ class SuperHeroAPI extends RESTDataSource {
   }
 
   async listHeroes() {
-    const heroes = await this.handleGetHeroes()
+    const heroes = await this.handleGetHeroes();
 
     return heroes;
   }
