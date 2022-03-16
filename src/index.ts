@@ -1,5 +1,4 @@
 import { ApolloServer } from 'apollo-server';
-import { ApolloServerPluginLandingPageProductionDefault } from 'apollo-server-core';
 import typeDefs from './graphql/typeDefs';
 import resolvers from './graphql/resolvers';
 import SuperHeroAPI from './graphql/dataSources/SuperHeroDataSource';
@@ -7,9 +6,6 @@ import SuperHeroAPI from './graphql/dataSources/SuperHeroDataSource';
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  plugins: [
-    ApolloServerPluginLandingPageProductionDefault({ footer: false }),
-  ],
   dataSources: () => {
     return {
       superHeroApi: new SuperHeroAPI()
@@ -17,6 +13,6 @@ const server = new ApolloServer({
   }
 });
 
-server.listen({ port: 5000 }).then(({ url }) => {
+server.listen({ port: 4000 }).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
 });
