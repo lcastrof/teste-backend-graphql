@@ -36,14 +36,14 @@ const resolvers = {
 
           if (keys.includes(order)) {
             heroes.sort((heroA, heroB) => {
-              if (heroA[order] > heroB[order]) return 1;
-              if (heroA[order] < heroB[order]) return -1;
+              if (heroA?.[order] > heroB?.[order]) return 1;
+              if (heroA?.[order] < heroB?.[order]) return -1;
               return 0;
             });
           } else if (isInnerKey && outterAtribute) {
             heroes.sort((heroA, heroB) => {
-              if (heroA[outterAtribute][order] > heroB[outterAtribute][order]) return 1;
-              if (heroA[outterAtribute][order] < heroB[outterAtribute][order]) return -1;
+              if (heroA[outterAtribute]?.[order] > heroB[outterAtribute]?.[order]) return 1;
+              if (heroA[outterAtribute]?.[order] < heroB[outterAtribute]?.[order]) return -1;
               return 0;
             });
           } else {
